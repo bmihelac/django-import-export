@@ -455,6 +455,10 @@ class ExportActionModelAdmin(ExportMixin, admin.ModelAdmin):
 
             export_data = self.get_export_data(file_format, queryset, request=request)
             content_type = file_format.get_content_type()
+
+            if file_format.get_content_type() == 'text/html':
+                export_data = "<head><meta charset='UTF-8'></head>" + export_data
+
             # Django 1.7 uses the content_type kwarg instead of mimetype
             try:
                 response = HttpResponse(export_data, content_type=content_type)
