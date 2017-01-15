@@ -210,7 +210,7 @@ class ModelResourceTest(TestCase):
         headers = self.resource.get_export_headers()
         self.assertEqual(headers, ['published_date', 'id', 'name', 'author',
                                    'author_email', 'published_time', 'price',
-                                   'categories', ])
+                                   'categories', 'paperback', ])
 
     def test_export(self):
         dataset = self.resource.export(Book.objects.all())
@@ -533,7 +533,7 @@ class ModelResourceTest(TestCase):
         self.assertEqual(len(dataset), 0)
 
     def test_import_data_skip_unchanged(self):
-        def attempted_save(instance, real_dry_run):
+        def attempted_save(instance, using_transactions, real_dry_run):
             self.fail('Resource attempted to save instead of skipping')
 
         # Make sure we test with ManyToMany related objects

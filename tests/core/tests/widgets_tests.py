@@ -13,6 +13,7 @@ from import_export import widgets
 from core.models import (
     Author,
     Category,
+    Book,
 )
 
 
@@ -196,3 +197,24 @@ class ManyToManyWidget(TestCase):
                          "%s,%s" % (self.cat1.pk, self.cat2.pk))
         self.assertEqual(self.widget_name.render(Category.objects),
                          u"%s,%s" % (self.cat1.name, self.cat2.name))
+
+
+class ChoiceWidgetTest(TestCase):
+
+    def setUp(self):
+        self.widget = widgets.ChoiceWidget(model=Book, field='paperback')
+        self.humanized = 'Soft cover'
+        self.choice = Book.SOFTCOVER
+        #self.book = Book.objects.create(name='Foo')#, paperback=self.choice)
+
+    def test_clean(self):
+        self.assertEqual(self.widget.clean(self.humanized), self.choice)
+
+    def test_clean_empty(self):
+        self.assertEqual(self.widget.clean(""), None)
+
+    def test_render(self):
+        self.assertEqual(self.widget.render(self.choice), self.humanized)
+
+    def test_render_empty(self):
+        self.assertEqual(self.widget.render(None), "")

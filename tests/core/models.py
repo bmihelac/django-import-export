@@ -34,6 +34,18 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True,
                                 blank=True)
     categories = models.ManyToManyField(Category, blank=True)
+    SOFTCOVER = 'S'
+    HARDCOVER = 'H'
+    BINDING_CHOICES = (
+        (SOFTCOVER, 'Soft cover'),
+        (HARDCOVER, 'Hard cover'),
+    )
+    paperback = models.CharField(
+        max_length=1,
+        choices=BINDING_CHOICES,
+        blank=True, null=True,
+        default='',
+    )
 
     def __str__(self):
         return self.name
