@@ -355,3 +355,35 @@ class ManyToManyWidget(Widget):
     def render(self, value, obj=None):
         ids = [smart_text(getattr(obj, self.field)) for obj in value.all()]
         return self.separator.join(ids)
+
+
+class ChoiceWidget(Widget):
+    """
+    Widget that converts between value to be set on the model,
+    and the the human-readable name when using Field.choices tuple.
+
+    :param model: The model which contains field with choices.
+    :param field: A field with choices.
+    """
+    def __init__(self, model, field, *args, **kwargs):
+        self.model = model
+        self.field = field
+        self.choices = self.model._meta.get_field(self.field).choices
+        super(ChoiceWidget, self).__init__(*args, **kwargs)
+
+    def clean(self, value, row=None, *args, **kwargs):
+        val = super(ChoiceWidget, self).clean(value)
+        if val:
+            for choice in self.choices:
+                if choice[1] == val:
+                    return choice[0]
+        else:
+            return None
+
+    def render(self, value, obj=None):
+        if value is None:
+            return ''
+        for choice in self.choices:
+            if choice[0] == value:
+                return choice[1]
+        return ''

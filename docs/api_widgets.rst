@@ -31,3 +31,6 @@ Widgets
 
 .. autoclass:: import_export.widgets.ManyToManyWidget
    :members:
+
+.. autoclass:: import_export.widgets.ChoiceWidget
+   :members:
