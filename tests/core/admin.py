@@ -30,8 +30,16 @@ class CategoryAdmin(ExportActionModelAdmin):
     pass
 
 
+class AuthorResource(ModelResource):
+
+    class Meta:
+        model = Author
+        clean_model_instances = True
+
+
 class AuthorAdmin(ImportMixin, admin.ModelAdmin):
-    pass
+    resource_class = AuthorResource
+
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(Category, CategoryAdmin)
