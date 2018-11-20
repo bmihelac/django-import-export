@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import random
 import string
@@ -17,7 +18,7 @@ class Author(models.Model):
 
     def clean(self):
         if self.name == 'Foo':
-            raise ValidationError('Name can not be "Foo"')
+            raise ValidationError('Name can not be "Foo" šđč')
 
 
 @python_2_unicode_compatible
