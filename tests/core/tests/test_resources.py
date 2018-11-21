@@ -314,20 +314,12 @@ class ModelResourceTest(TestCase):
         self.assertIn('birthday', result.invalid_rows[0].field_specific_errors)
 
     def test_import_data_raises_unicode_validation_errors_without_erroring(self):
-        russian_valueerror_msg = "Ова вриједност је страшна!"
-
-        class HarshRussianWidget(widgets.CharWidget):
-            def clean(self, value, row=None, *args, **kwargs):
-                raise ValueError(russian_valueerror_msg)
 
         class AuthorResource(resources.ModelResource):
 
             class Meta:
                 model = Author
-
-            @classmethod
-            def widget_from_django_field(cls, f, default=widgets.Widget):
-                return HarshRussianWidget
+                clean_model_instances = True
 
         resource = AuthorResource()
         dataset = tablib.Dataset(headers=['id', 'name', 'birthday'])
@@ -338,8 +330,8 @@ class ModelResourceTest(TestCase):
         self.assertTrue(result.has_validation_errors())
         self.assertIs(result.rows[0].import_type, results.RowResult.IMPORT_TYPE_INVALID)
         self.assertEqual(
-            result.invalid_rows[0].field_specific_errors['name'],
-            [russian_valueerror_msg]
+            result.invalid_rows[0].non_field_specific_errors,
+            ['Ова вриједност је страшна!']
         )
 
     def test_import_data_error_saving_model(self):
