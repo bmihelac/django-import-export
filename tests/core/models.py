@@ -82,6 +82,7 @@ class Book(models.Model):
     published_time = models.TimeField("Time published", blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     added = models.DateTimeField(blank=True, null=True)
+    binary_field = models.BinaryField(blank=True, null=True, editable=True)
 
     categories = models.ManyToManyField(Category, blank=True)
 
